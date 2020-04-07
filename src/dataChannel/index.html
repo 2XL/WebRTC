@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+	<title>TODO supply a title</title>
+	<script src="dataChannel.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+
+
+
+
+	<button id="setup-datachannel" style="width:30%;">Open NEW DataChannel</button>
+
+
+
+	<input type="text" id="chat-input" disabled style="font-size: 2em; width: 65%;"><br />
+
+
+	<div id="chat-output"></div>
+
+	<script>
+	    var chatOutput = document.getElementById('chat-output');
+	    var chatInput = document.getElementById('chat-input');
+	    chatInput.onkeypress = function(e) {
+		if (e.keyCode !== 13)
+		    return;
+		channel.send(this.value);
+		chatOutput.innerHTML = 'Me: ' + this.value + '<hr />' + chatOutput.innerHTML;
+		this.value = '';
+	    };
+
+	    var channel = new DataChannel();
+
+	    channel.onopen = function(userid) {
+		chatInput.disabled = false;
+		chatInput.value = 'Hi, ' + userid;
+		chatInput.focus();
+	    };
+
+	    channel.onmessage = function(message, userid) {
+		chatOutput.innerHTML = userid + ': ' + message + '<hr />' + chatOutput.innerHTML;
+	    };
+
+	    channel.onleave = function(userid) {
+		chatOutput.innerHTML = userid + ' Left.<hr />' + chatOutput.innerHTML;
+	    };
+
+	    // search for existing data channels
+	    channel.connect();
+
+	    document.querySelector('button#setup-datachannel').onclick = function() {
+		// setup new data channel
+		channel.open();
+	    };
+
+
+
+	    var channel = new DataChannel('[optional] channel-name');
+	    channel.send(file || data || 'text-message');
+
+	    // to create/open a new channel
+	    channel.open('channel-name');
+
+	    // if soemone already created a channel; to join it: use "connect" method
+	    channel.connect('channel-name');
+	</script>
+    </body>
+</html>

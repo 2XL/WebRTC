@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="keywords" content="JavaScript, WebRTC" />
+        <meta name="description" content="WebRTC codelab" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+        <link href="css/bootstrap.css" rel="stylesheet" >
+        <link href="css/style.css" rel="stylesheet" >
+        <title>WebRTC codelab: step 4</title>
+        <style>
+        </style>
+        <script src='js/lib/adapter.js'></script>
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                header
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                
+                    <div class="tvarea pull-left">
+                        <p>dataChannelSend</p>
+                        <textarea cols="50" rows="4" class="tarea" id="dataChannelSend" placeholder="Press Start, enter some text, then press Send."></textarea>
+                    </div>
+                    <div class="tvarea pull-right">
+                        <p>dataChannelReceive</p>
+                        <textarea cols="50" rows="4" class="tarea" id="dataChannelReceive" ></textarea>
+                    </div>
+
+                    <br>
+
+              
+            </div>
+            <div class="row">
+                <div id="buttons">
+                    <button class="btn btn-primary" id="startButton">Start</button>
+                    <button class="btn btn-success" id="sendButton">Send</button>
+                    <button class="btn btn-danger" id="closeButton">Stop</button>
+                </div>
+            </div>
+            <div id="chatlog">
+                
+            </div>
+        </div>
+        
+        
+        
+        
+        <!-- default step 4 js -->
+        <script>
+       
+            var sendChannel, receiveChannel;
+
+            var startButton = document.getElementById("startButton");
+            var sendButton = document.getElementById("sendButton");
+            var closeButton = document.getElementById("closeButton");
+            startButton.disabled = false;
+            sendButton.disabled = true;
+            closeButton.disabled = true;
+            startButton.onclick = createConnection;
+            sendButton.onclick = sendData;
+            closeButton.onclick = closeDataChannels;
+	    
+	    
+	    
+	    
+	    
+            function trace(text) {
+                console.log((performance.now() / 1000).toFixed(3) + ": " + text);
+            }
+
+            function createConnection(){
+                var servers = null;
+		
+		
+		
+		
+		// creacio de un local peerconnection desde un source a
+                window.localPeerConnection = new RTCPeerConnection(servers,
+                        {optional: [{RtpDataChannels: true}]});
+                trace('Created local peer connection object localPeerConnection');
+
+                try {
+                    // Reliable Data Channels not yet supported in Chrome
+                    sendChannel = localPeerConnection.createDataChannel("sendDataChannel",
+                            {reliable: false});
+                    trace('Created send data channel');
+                } catch (e) {
+                    alert('Failed to create data channel. ' +
+                            'You need Chrome M25 or later with RtpDataChannel enabled');
+                    trace('createDataChannel() failed with exception: ' + e.message);
+                }
+		 
+	 
+                localPeerConnection.onicecandidate = gotLocalCandidate; // vincular els peer conection local i remot de la mateixa pagina
+                sendChannel.onopen = handleSendChannelStateChange; // action listeners on channel change
+                sendChannel.onclose = handleSendChannelStateChange; // action listener and manipulator on channel change
+
+
+		// creació de un remote peer connection desde un source a' la mateixa que a perque no hiha intermediari de servidors
+                window.remotePeerConnection = new RTCPeerConnection(servers,
+                        {optional: [{RtpDataChannels: true}]});
+                trace('Created remote peer connection object remotePeerConnection');
+
+                remotePeerConnection.onicecandidate = gotRemoteIceCandidate; // vincular els peer conection local i remto de la metixa pagina
+                remotePeerConnection.ondatachannel = gotReceiveChannel; // mostra el missatge enviat per el peer conection channel input ta
+
+                localPeerConnection.createOffer(gotLocalDescription, handleError);
+                startButton.disabled = true;
+                closeButton.disabled = false;
+            }
+
+            function sendData() {
+                var data = document.getElementById("dataChannelSend").value;
+                sendChannel.send(data);
+                trace('Sent data: ' + data);
+            }
+
+            function closeDataChannels() {
+                trace('Closing data channels');
+                sendChannel.close();
+                trace('Closed data channel with label: ' + sendChannel.label);
+                receiveChannel.close();
+                trace('Closed data channel with label: ' + receiveChannel.label);
+                localPeerConnection.close();
+                remotePeerConnection.close();
+                localPeerConnection = null;
+                remotePeerConnection = null;
+                trace('Closed peer connections');
+                startButton.disabled = false;
+                sendButton.disabled = true;
+                closeButton.disabled = true;
+                dataChannelSend.value = "";
+                dataChannelReceive.value = "";
+                dataChannelSend.disabled = true;
+                dataChannelSend.placeholder = "Press Start, enter some text, then press Send.";
+            }
+
+            function gotLocalDescription(desc) {
+                localPeerConnection.setLocalDescription(desc);
+                trace('Offer from localPeerConnection \n' + desc.sdp);
+                remotePeerConnection.setRemoteDescription(desc);
+                remotePeerConnection.createAnswer(gotRemoteDescription, handleError);
+            }
+
+            function gotRemoteDescription(desc) {
+                remotePeerConnection.setLocalDescription(desc);
+                trace('Answer from remotePeerConnection \n' + desc.sdp);
+                localPeerConnection.setRemoteDescription(desc);
+            }
+
+            function gotLocalCandidate(event) {
+                trace('local ice callback');
+                if (event.candidate) {
+                    remotePeerConnection.addIceCandidate(event.candidate);
+                    trace('Local ICE candidate: \n' + event.candidate.candidate);
+                }
+            }
+
+            function gotRemoteIceCandidate(event) {
+                trace('remote ice callback');
+                if (event.candidate) {
+                    localPeerConnection.addIceCandidate(event.candidate);
+                    trace('Remote ICE candidate: \n ' + event.candidate.candidate);
+                }
+            }
+
+            function gotReceiveChannel(event) {
+                trace('Receive Channel Callback');
+                receiveChannel = event.channel;
+                receiveChannel.onmessage = handleMessage;
+                receiveChannel.onopen = handleReceiveChannelStateChange;
+                receiveChannel.onclose = handleReceiveChannelStateChange;
+            }
+
+            function handleMessage(event) {
+                trace('Received message: ' + event.data);
+                document.getElementById("dataChannelReceive").value = event.data;
+            }
+
+            function handleSendChannelStateChange() {
+                var readyState = sendChannel.readyState;
+                trace('Send channel state is: ' + readyState);
+                if (readyState === "open") {
+                    dataChannelSend.disabled = false;
+                    dataChannelSend.focus();
+                    dataChannelSend.placeholder = "";
+                    sendButton.disabled = false;
+                    closeButton.disabled = false;
+                } else {
+                    dataChannelSend.disabled = true;
+                    sendButton.disabled = true;
+                    closeButton.disabled = true;
+                }
+            }
+
+            function handleReceiveChannelStateChange() {
+                var readyState = receiveChannel.readyState;
+                trace('Receive channel state is: ' + readyState);
+            }
+
+            function handleError() {
+            }
+
+
+
+
+        </script>
+        <script src="js/jquery.js" ></script>
+        <script src="js/bootstrap.js" type="text/javascript" ></script>
+	<script src="js/script.js" ></script>
+    </body>
+
+</html>

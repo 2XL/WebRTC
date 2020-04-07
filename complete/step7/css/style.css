@@ -1,0 +1,71 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 03-abr-2014, 16:06:15
+    Author     : Sarai
+*/
+
+/*
+	    <hr>
+	    <br>
+	    <div class="row">
+		<div class="col-lg-4 col-sm-4">
+		    <label>
+			Log Stream room 
+		    </label>
+		    <div id="streamLog"> 
+		    </div>
+		</div>
+		<div class="col-lg-4 col-sm-4"> 
+		    <label>
+			Local Stream
+		    </label>
+		    <video id="localStream">
+		    </video>
+		</div>
+		<div class="col-lg-4 col-sm-4"> 
+		    <label>
+			Remote Stream
+		    </label>
+		    <video id="remoteStream">
+		    </video> 
+		</div>
+	    </div>
+
+	    <script src="js/JSstreamRoom.js"></script>
+*/
+
+
+
+
+
+
+video{
+    border: 1px solid red;
+    background-color: blue;
+    width: 360px;
+    height: 240px;
+}
+
+
+
+.video-container{
+    position: relative;
+    height: 0;
+    overflow: hidden;
+}
+
+.video-container iframe, 
+.video-container object, 
+.video-container embed { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;  
+    padding-bottom: 56.25%;
+    padding-top: 30px; 
+}

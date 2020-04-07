@@ -1,0 +1,58 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 03-mar-2014, 11:45:50
+    Author     : Sarai
+*/
+/*
+
+adjustments to bootstrap and costumized style using bootstrap :D
+*/
+
+// costumize header margin :D
+.page-header{
+    margin-top: 0;
+}
+
+.panel-body{
+    padding-top: 0;
+}
+
+.featuredImg{
+    margin-bottom: 15px;
+    width: 50%;
+}
+
+body{
+    margin-bottom: 80px;
+}
+
+.code404Parent{
+    width:500px;
+    margin:0px auto;
+    text-align: center;
+    padding:15px;
+    border:1px dashed #333;
+    background-color:#eee;
+
+}
+.code404{
+    //http://bluerobot.com/web/css/center1.html 
+
+
+}
+
+hr {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #EEEEEE -moz-use-text-color #FFFFFF;
+  border-style: solid none;
+  border-width: 1px 0;
+  margin: 18px 0;
+}

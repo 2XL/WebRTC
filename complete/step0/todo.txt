@@ -1,0 +1,39 @@
+
+2h project :D
+
+
+
+current time: 12:37h - 25/04/2014
+
+
+once the cross-browser implementation is complete webrtc will provide us with api functions that enables us to:
+
+
+detect dev capabilities
+capture media from local devs
+encode and process those media streams
+establish connections over direct p2p, including firewall/NAT traverssal
+decode and process, including echo cancelling, stream synch ad num of other fucntions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Getting started with WebRTC</title>
+        <link href="styles.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+
+        <h1>Warning! Wear headphones!</h1>
+
+	<!-- canvas stream -->
+	<!-- it seems prety cool :D 
+	
+	we can use canvas to manipulate pixel data by modifying the rgb values of individual pixels :D
+	to do this we need to:
+ 
+	    1 convert our video stream to a canvas feed
+	    2 grab the image data from our canvas
+	    3 loop through our imagedata array and manipulate pixels
+	    4 output to a display canvas
+ 
+	-->
+	
+        <video id="webcam"></video>
+	
+	
+	
+	
+        <canvas id="feed"></canvas>
+        <canvas id="display"></canvas>
+        <canvas id="photo"></canvas>
+
+	
+	
+        <input type="button" id="takePhoto" value="Cheese!" />
+        
+	
+	
+	
+	
+        <script src="script.js"></script>
+    </body>
+</html>

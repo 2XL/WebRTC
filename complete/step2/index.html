@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="keywords" content="JavaScript, WebRTC" />
+        <meta name="description" content="WebRTC codelab" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+        <title>WebRTC codelab: step 2</title>
+        <style>
+
+            video {
+                /*
+                ha ara me dono compte el pk me tornat blau :D
+                */
+                filter: hue-rotate(180deg) saturate(200%);
+                -moz-filter: hue-rotate(180deg) saturate(200%);
+                -webkit-filter: hue-rotate(180deg) saturate(200%);
+                /*
+                
+                more vid or image editing samples:
+                https://hacks.mozilla.org/2011/01/zooming-and-rotating-for-video-in-html5-and-css3/
+                
+               
+                */
+
+
+
+            }
+
+
+        </style>
+        <script src="js/jquery.js"></script>
+        <script src='js/lib/adapter.js'></script>
+    </head>
+    <body>
+        <p>
+            there is an video element here
+        </p>
+        <!--
+        <video> 
+        </video>  
+        1 here is an video element 
+        
+        
+        -->
+
+        <video id="localVideo" >
+
+        </video>
+
+        <p>
+            video element ends here
+        </p>
+
+        <p>
+            defualt replay js
+        </p>
+
+        <p>
+            chatLOG
+        </p>
+        <div id="chatlog">
+
+        </div> 
+        <div id="chatlogPre">
+
+        </div>
+        <script type="text/javascript">
+
+
+
+            // adapter.js --> default, chrome, mozilla 
+            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+            var constraints = {video: true};
+            // 4 what happens when you change it from -> to
+
+            // var constraints = {audio: true, video: true};
+
+
+            function successCallback(localMediaStream) {
+                window.stream = localMediaStream; // stream available to console
+                var video = document.querySelector("video");
+                video.src = window.URL.createObjectURL(localMediaStream);
+                video.play(); // aqui demana permis? nomes una foto o un stream de fotos :D
+
+                button = document.getElementById("stopStreamBtn");
+                button.disabled = false;
+                // fer visible un boto  
+            }
+
+            function errorCallback(error) {
+                console.log("navigator.getUserMedia error: ", error);
+            }
+
+
+
+
+            // getUSERmedia is called like this:
+            navigator.getUserMedia(constraints, successCallback, errorCallback);
+            // the constraint argument allows us to specify the media to get in this case video only
+            // if successful the video stream from the webcam is set as the source of the video elemnt :D
+
+
+
+
+
+        </script> 
+
+        <button id="stopStreamBtn" >
+            StopStream!
+        </button>
+
+        <button id="getVidTracks" >
+            getVidTracks!
+        </button>
+
+        <button id="zoomInBtn">
+            Zoom+
+        </button>
+        <button id="zoomOutBtn">
+            Zoom-
+        </button>
+
+        <script type="text/javascript" >
+
+            var buttonStopStream = '#stopStreamBtn';
+            var buttonGetVideoTracks = '#getVidTracks';
+            // bonus point :D
+            // em sembla que caldra afegir la llibreria de jquery :D
+            var buttonZoomIn = '#zoomInBtn';
+            var buttonZoomOut = '#zoomOutBtn';
+
+ 
+
+            $(buttonZoomIn).click(function() {
+                var video = document.getElementById('localVideo');
+                var cur = video.videoHeight;
+                cur += 100;
+                video.setAttribute('height', cur);
+            });
+
+
+            $(buttonZoomOut).click(function() {
+                var video = document.getElementById('localVideo');
+                var cur = video.videoHeight;
+                cur -= 100;
+                video.setAttribute('height', cur);
+            });
+
+            // video maniputaling
+
+
+
+            $(buttonGetVideoTracks).click(function() {
+                stream.getVideoTracks();
+                writeToChatLog(stream.getVideoTracks(), "text-success");
+                /*
+                 stream.getVideoTracks()
+                 [
+                 MediaStreamTrack
+                 enabled: true
+                 id: "6a87a49c-f8ec-4141-9ad1-7dc164e712e5"
+                 kind: "video"
+                 label: "Chicony USB 2.0 Camera (04f2:b34c)"
+                 onended: null
+                 onmute: null
+                 onunmute: null
+                 readyState: "live"
+                 __proto__: MediaStreamTrack
+                 */
+                // amb audio true:
+                /*
+                 from:
+                 []
+                 to:
+                 stream.getAudioTracks()
+                 [
+                 MediaStreamTrack
+                 enabled: true
+                 id: "1eeb0cbb-0eb7-46e4-a0b0-c4cbae8c961d"
+                 kind: "audio"
+                 label: "Default"
+                 onended: null
+                 onmute: null
+                 onunmute: null
+                 readyState: "live"
+                 __proto__: MediaStreamTrack
+                 */
+
+            });
+            $(buttonStopStream).click(function() {
+                $(buttonStopStream).disibled = true;
+                stream.stop();
+            });
+
+
+
+
+            function getTimestamp() {
+                var totalSec = new Date().getTime() / 1000;
+                var hours = parseInt(totalSec / 3600) % 24;
+                var minutes = parseInt(totalSec / 60) % 60;
+                var seconds = parseInt(totalSec % 60);
+
+                var result = (hours < 10 ? "0" + hours : hours) + ":" +
+                        (minutes < 10 ? "0" + minutes : minutes) + ":" +
+                        (seconds < 10 ? "0" + seconds : seconds);
+
+                return result;
+            }
+
+            //text-success : message_type
+            function writeToChatLog(message, message_type) {
+                document.getElementById('chatlog').innerHTML += '<p class=\"' + message_type + '\">' + "[" + getTimestamp() + "] " + message + '</p>';
+                document.getElementById('chatlogPre').innerHTML += '<pre>' + message + '</pre>';
+            }
+
+        </script>
+
+ 
+
+        <p>
+            default js
+        </p>
+        <script type="text/javascript">
+            /*
+             var constraints = {video: true};
+             
+             function successCallback(stream) {
+             window.stream = stream; // stream available to console
+             var video = document.querySelector("video");
+             video.src = window.URL.createObjectURL(stream);
+             video.play();
+             }
+             function errorCallback(error) {
+             console.log("getUserMedia error: ", error);
+             }
+             getUserMedia(constraints, successCallback, errorCallback);
+             */
+        </script>
+
+
+
+    </body>
+</html>

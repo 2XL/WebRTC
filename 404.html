@@ -1,0 +1,37 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>WARNING 404</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap.min.css" rel="stylesheet" >
+        <link href="css/style.css" rel="stylesheet" >
+        <script type="text/javascript" >
+            window.onload = function injectTime(){
+                var d = new Date();
+                var x = document.getElementById("clock");
+                var time = d.getTime();
+                var date = new Date(time); 
+                x.innerHTML = date;
+            };
+        </script>
+        <meta charset="UTF-8">
+    </head>
+    <body style="	
+          margin:50px 0px; 
+          padding:0px;
+          text-align:center;">
+        <div class="code404Parent">
+            <div class="code404" >
+                Ola Ke Ase, Infraganti!
+                <br>
+                Content not found...
+                <br>
+                <div id="clock"></div>
+            </div> 
+        </div>
+
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+    </body>
+</html>

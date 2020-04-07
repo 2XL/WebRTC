@@ -1,0 +1,352 @@
+
+<html>
+    <head>
+        <title>WebRTC Hello World</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/bootstrap.min.css" rel="stylesheet" >
+        <link href="../css/style.css" rel="stylesheet" > 
+        <link href="css/serverless-webrtc-bootstrap.css" rel="stylesheet" >
+        <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico"/>
+        <script src="js/adapter.js"></script>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <!-- top : header -->
+        <div class="navbar navbar-inverse navbar-static-top"> 
+            <div class="container"> 
+                <a href="../index.html" class="navbar-brand">WebRTC Project</a>
+                <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                <div class="collapse navbar-collapse navHeaderCollapse">
+                    <!-- weird stuff sense el boto implica que quan se comprimeix en un formatnavegador movil aleshores se quedaran ocults i fara falta un boto substitut referintse al contingut del navbar despres de collapse -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">MyPeer</a></li>
+                        <li><a href="#">Search</a></li>  
+                        <li><a href="#contact" data-toggle='modal'>Contact</a></li>
+                        <li class="dropdown"> 
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Social Media<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Twitter</a></li>
+                                <li><a href="#">Facebook</a></li>
+                                <li><a href="#">Google+</a></li>
+                                <li><a href="#">Instagram</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown active"> 
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Lab<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li class="active"><a href="helloworld.html">Hello World</a></li>
+                                <li><a href="peerconection.html">Peer Connection</a></li>
+                                <li><a href="#">...</a></li>
+                                <li><a href="#">...</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div> 
+            </div>
+        </div>
+
+        <!-- serverless-webrtc-bootstrap.css -->
+
+        <!-- adapter.js -->
+        <script type="text/javascript">
+            // no tira en chrome :D
+            // 
+            // copy to clipboard
+            function copyToClipboard(id) {
+                var controlValue = document.getElementById(id).value; // tipus input      
+                if (controlValue === undefined) {
+                    var controlValue = document.getElementById(id).innerHTML; // altres tipus
+                }
+                window.clipboardData.setData('Text', controlValue);
+            }
+            // past clipboard content to browser
+            function pasteFromClipboard(id) {
+                var field = document.getElementById(id);
+                field.value = window.clipboardData.getData('Text');
+            }
+        </script>
+
+
+        <!-- definition --> 
+        <!--
+        <div class='container'>
+         
+        </div>
+        -->
+
+        <!-- middle: side -->
+        <div class='container'> 
+            <div class='span12'>
+                <fieldset class='well'>
+                    <p class='head muted'>
+                        WebRTC chat DEMO
+                    </p>
+                    <div class='text-info' id='chatlog' style='height: 350px; overflow: auto;'>
+
+                    </div>
+                </fieldset> 
+                <form class='from-inline' onSubmit='return sendMessage()' action=''>
+                    <div class='row'>
+                        <div class='col-sm-9'>
+                            <input class='form-control' type='text' id='messageTextBox' placeholder="Type your msg here">
+                        </div>
+                        <div class='col-sm-3'>
+                            <button type='submit' id='sendMessageBtn' class='btn '>Send message</button>
+                        </div>
+                    </div> 
+                </form>
+                <span class="btn btn-default btn-file">
+                    Browse: 
+                        <input type='file' id='fileBtn'>
+                </span>
+            
+            </div> 
+        </div>
+
+
+
+        <!-- server: side --> 
+
+
+
+
+        <!-- bottom : footer --> 
+        <div class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container">
+                <p class="navbar-text pull-left">
+                    WebRTC Project
+                </p>
+                <a href="#" class="navbar-btn btn">Subscribe page</a> 
+                <a class="navbar-btn btn-danger btn pull-right">Report Bug</a>
+            </div>
+        </div>
+
+        <!-- contact : modal header -->
+        <div class="modal fade" id="contact" role="dialog"> 
+            <div class='modal-dialog'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h4>Contact BidCoin</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>algunas personas solo ven aquello que coincide con sus prejuicios</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" data-dismiss="modal" >Close</a>
+                        <a class="btn btn-danger">Danger</a>
+                        <a class="btn btn-primary">Primary</a>
+                    </div>
+                </div>
+            </div> 
+        </div>
+
+        
+        
+        
+        
+        
+        
+        <!-- modal : showLocalOffer -->
+        <div class="modal" id="showLocalOffer" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden>
+            <div class="modal-content"> 
+                <div class="modal-header">
+                    <h3 id="myModalLabel">
+                        Send this Offer to target!
+                    </h3> 
+                </div>
+                <div class="modal-body">
+                    <h5>
+                        Offer:
+                    </h5>
+                    <br/>
+                    <textarea class="input-large"   id="localOffer" name="localOffer" rows="10" cols="100">
+                    offer
+                    </textarea>
+                </div>
+                <div class="modal-footer"> 
+                    <button class="btn btn-default" onclick="copyToClipboard('localOffer')">
+                        copy to clipboard!
+                    </button> 
+                    <button class="btn btn-primary" id="offerSentBtn" data-dismiss="modal" aria-hidden="true">
+                        Okey, I sent it.
+                    </button>  
+                </div>
+            </div>
+        </div>
+
+
+        <!-- modal : showLocalAnswer -->
+        <div class='modal' id='showLocalAnswer' data-backdrop='static' tabindex="-1" role='dialog' aria-labelledby='myModalLabel' aria-hidden='true' hidden>
+            <div class="modal-content">
+
+
+                <div class='modal-header'>
+                    <h3 id="myModalLabel">
+                        Send this Answer to requester!
+                    </h3> 
+                </div>
+                <div class='modal-body'>
+                    <h5>
+                        Answer:
+                    </h5>
+                    <br/>
+                    <textarea class='input-large'  id='localAnswer' name='localAnswer' rows='10' cols='100'>
+                    answer
+                    </textarea>
+                </div>
+                <div class='modal-footer'>
+                    <button class="btn btn-default" onclick="copyToClipboard('localAnswer')">
+                        copy to clipboard!
+                    </button>
+                    <button class="btn btn-primary" id="answerSentBtn" data-dismiss="modal" aria-hidden="true">
+                        Okey, I sent it.
+                    </button>
+                </div>
+            </div>
+        </div> 
+
+        <!-- modal : getRemoteOffer -->
+        <div class="modal" id="getRemoteOffer" data-backup="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden>
+            <div class="modal-content">
+
+
+                <div class="modal-header">
+                    <h3 id="myModalLabel">
+                        Paste the Offer you received!
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <h5>
+                        Paste here:
+                    </h5>
+                    <br/>
+                    <textarea class="input-large"  id="remoteOffer" name="remoteOffer" rows="10" cols="100">
+                    Remote-offer:
+                    </textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" onclick="pasteFromClipboard('remoteOffer')">
+                        paste from clipboard!
+                    </button>
+                    <button class="btn btn-primary" id="offerRecdBtn" data-dismiss="modal" aria-hidden="true">
+                        Okey, I pasted it.
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- modal : getRemoteAnswer -->
+        <div class="modal" id="getRemoteAnswer" data-backup="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden>
+            <div class="modal-content">
+
+
+                <div class="modal-header">
+                    <h3 id="myModalLabel">
+                        Paste the Answer you received!
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <h5>
+                        Paste here:
+                    </h5>
+                    <br/>
+                    <textarea class="input-large"   id="remoteAnswer" name="remoteAnswer" rows="10" cols="100">
+                    Remote-answer:
+                    </textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default"  onclick="pasteFromClipboard('remoteAnswer')">
+                        paste from clipboard
+                    </button>
+                    <button class="btn btn-primary" id="answerRecdBtn" data-dismiss="modal" aria-hidden="true">
+                        Okey, I pasted it.
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- modal : w8 4 connection -->
+
+        <div class="modal" id="waitForConnection" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden>
+            <div class="modal-content">
+
+
+                <div class="modal-header">
+                    <h3 id="myModalLabel">
+                        w8ting 4 connection
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    this dialog will desapear when a connection is made...
+                </div>
+                <div class="spinner" align="center">
+                    <img src="../img/spinner.gif"/>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal" id="createOrJoin" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-content"> 
+                <div class="modal-header">
+                    <h3 id="myModalLabel">
+                        create or join a room?
+                    </h3>
+                </div>
+                <div class="modal-body"> 
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="joinBtn" data-dismiss="modal" aria-hidden="true">Join</button>
+                    <button class="btn btn-primary" id="createBtn" data-dismiss="modal" aria-hidden="true">Create</button>
+                </div>
+            </div> 
+        </div>        
+
+
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="../js/bootstrap.js"></script>
+
+        <!-- serverless-webrtc.js -->
+        <script src="js/serverless-webrtc.js"></script>
+        <script type="text/javascript">
+
+        </script>
+
+        <!-- file-transfer.js -->
+        <script src="js/file-transfer.js"></script>
+        <script type="text/javascript">
+
+        </script>
+
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

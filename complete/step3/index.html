@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <meta name="keywords" content="JavaScript, WebRTC" />
+        <meta name="description" content="WebRTC codelab" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+        <script src="js/jquery.js"></script>
+        <title>WebRTC codelab: step 3</title>
+
+        <style>
+
+
+        </style>
+
+        <script src='js/lib/adapter.js'></script>
+
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-inverse navbar-static-top">
+            <div class="container">
+                <p>
+                    header
+                </p>
+            </div>
+        </div>
+        <div class="container">
+            <div class="table table-striped table-bordered">
+                <div class="pull-left">
+                    <p>
+                        localVideo
+                    </p>
+                    <video id="localVideo" autoplay muted></video>
+                </div>
+                <div class="pull-right">
+                    <p>
+                        remoteVideo
+                    </p>
+                    <video id="remoteVideo" autoplay muted></video>
+                </div>
+                <div>
+                    <button class="btn-primary form-control" id="startButton">Start</button>
+                    <button class="btn-success form-control" id="callButton">Call</button>
+                    <button class="btn-danger form-control" id="hangupButton">Hang Up</button>
+                </div>
+
+                <div>
+                    <div class="container" id="chatlog">
+                        <div class="navbar-text">
+                            
+                        </div>
+                    </div> 
+                </div>
+              
+            </div>
+        </div>
+
+        <!--
+        <div class="navbar navbar-default navbar-fixed-bottom"> 
+        -->
+
+        <script>
+            /*
+             var localStream, localPeerConnection, remotePeerConnection;
+             
+             var localVideo = document.getElementById("localVideo");
+             var remoteVideo = document.getElementById("remoteVideo");
+             
+             var startButton = document.getElementById("startButton");
+             var callButton = document.getElementById("callButton");
+             var hangupButton = document.getElementById("hangupButton");
+             startButton.disabled = false;
+             callButton.disabled = true;
+             hangupButton.disabled = true;
+             startButton.onclick = start;
+             callButton.onclick = call;
+             hangupButton.onclick = hangup;
+             
+             function trace(text) {
+             console.log((performance.now() / 1000).toFixed(3) + ": " + text);
+             }
+             
+             function gotStream(stream) {
+             trace("Received local stream");
+             localVideo.src = URL.createObjectURL(stream);
+             localStream = stream;
+             callButton.disabled = false;
+             }
+             
+             function start() {
+             trace("Requesting local stream");
+             startButton.disabled = true;
+             getUserMedia({audio: true, video: true}, gotStream,
+             function(error) {
+             trace("getUserMedia error: ", error);
+             });
+             }
+             
+             function call() {
+             callButton.disabled = true;
+             hangupButton.disabled = false;
+             trace("Starting call");
+             
+             if (localStream.getVideoTracks().length > 0) {
+             trace('Using video device: ' + localStream.getVideoTracks()[0].label);
+             }
+             if (localStream.getAudioTracks().length > 0) {
+             trace('Using audio device: ' + localStream.getAudioTracks()[0].label);
+             }
+             
+             var servers = null;
+             
+             localPeerConnection = new RTCPeerConnection(servers);
+             trace("Created local peer connection object localPeerConnection");
+             localPeerConnection.onicecandidate = gotLocalIceCandidate;
+             
+             remotePeerConnection = new RTCPeerConnection(servers);
+             trace("Created remote peer connection object remotePeerConnection");
+             remotePeerConnection.onicecandidate = gotRemoteIceCandidate;
+             remotePeerConnection.onaddstream = gotRemoteStream;
+             
+             localPeerConnection.addStream(localStream);
+             trace("Added localStream to localPeerConnection");
+             localPeerConnection.createOffer(gotLocalDescription, handleError);
+             }
+             
+             function gotLocalDescription(description) {
+             localPeerConnection.setLocalDescription(description);
+             trace("Offer from localPeerConnection: \n" + description.sdp);
+             remotePeerConnection.setRemoteDescription(description);
+             remotePeerConnection.createAnswer(gotRemoteDescription, handleError);
+             }
+             
+             function gotRemoteDescription(description) {
+             remotePeerConnection.setLocalDescription(description);
+             trace("Answer from remotePeerConnection: \n" + description.sdp);
+             localPeerConnection.setRemoteDescription(description);
+             }
+             
+             function hangup() {
+             trace("Ending call");
+             localPeerConnection.close();
+             remotePeerConnection.close();
+             localPeerConnection = null;
+             remotePeerConnection = null;
+             hangupButton.disabled = true;
+             callButton.disabled = false;
+             }
+             
+             function gotRemoteStream(event) {
+             remoteVideo.src = URL.createObjectURL(event.stream);
+             trace("Received remote stream");
+             }
+             
+             function gotLocalIceCandidate(event) {
+             if (event.candidate) {
+             remotePeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
+             trace("Local ICE candidate: \n" + event.candidate.candidate);
+             }
+             }
+             
+             function gotRemoteIceCandidate(event) {
+             if (event.candidate) {
+             localPeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
+             trace("Remote ICE candidate: \n " + event.candidate.candidate);
+             }
+             }
+             
+             function handleError() {
+             }
+             */
+        </script>
+
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+
+        <script src="js/script.js"></script>
+
+    </body>
+
+</html>
+<!--
+
+stream video with rtcPeerConnection
+    is the webrtc api for vi and audio calling D::::
+
+    this example sets two 2 connection on the same page :D aver si ho puc lograr en ffox chrome & opera
+
+    2vid elems and 3but
+
+    explanation 
+// this code does a lot
+    get and share local and r emote desc
+    // in session description format
+    // get and share ice candidates : network info.
+
+
+
+
+-->

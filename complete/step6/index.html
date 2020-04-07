@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <meta name='keywords' content='WebRTC, HTML5, JavaScript' />
+        <meta name='description' content='WebRTC Reference App' />
+        <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1'>
+        <script src="js/jquery.js"></script>
+        <link href="css/bootstrap.css" rel="stylesheet">
+
+        <base target='_blank'>
+        <style>
+            video {
+                border: 1px solid red;
+                background-color: blue;
+                width: 120px;
+                height: 60px;
+            }
+
+            .video-container { 
+                position: relative; 
+                height: 0; 
+                overflow: hidden; 
+            }
+
+
+            .video-container iframe, 
+            .video-container object, 
+            .video-container embed { 
+                position: absolute; 
+                top: 0; 
+                left: 0; 
+                width: 100%; 
+                height: 100%;  
+                padding-bottom: 56.25%;
+                padding-top: 30px; 
+            }
+        </style>
+        <title>WebRTC client</title>
+
+        <!-- <link rel='stylesheet' href='css/main.css' /> -->
+
+    </head>
+
+    <body>
+
+
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                header
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div>
+                    <p>why is there an hello world?</p>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="table table-striped table-bordered">
+                    <div class="pull-left">
+                        <p>
+                            local video
+                        </p>
+                        <video id='localVideo' autoplay muted></video>
+                    </div>
+                    <div class="pull-right">
+
+                        <p>
+                            remote video
+                        </p>
+                        <video id='remoteVideo' autoplay></video>
+                    </div>
+                </div>
+            </div>                
+        </div>
+
+        <div class="container">
+            <p>bottom </p>
+        </div>
+
+        <script src="js/bootstrap.js"></script>
+        <script src='js/socket.io.js'></script>
+        <script src='js/lib/adapter.js'></script>
+        <script src='js/script.js'></script>
+
+    </body>
+</html>
